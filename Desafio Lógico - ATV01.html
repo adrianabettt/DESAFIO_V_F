@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz: Lógica Digital</title>
+    <style>
+        body { font-family: sans-serif; background-color: #e3f2fd; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .quiz-container { background: white; border-radius: 20px; padding: 40px; width: 80%; max-width: 800px; text-align: center; border: 4px solid #2196F3; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .pergunta { font-size: 32px; margin: 30px 0; font-weight: bold; color: #333; min-height: 100px; }
+        #contador { font-size: 20px; color: #666; }
+        button { font-size: 24px; padding: 20px 40px; margin: 15px; cursor: pointer; border-radius: 12px; border: none; transition: 0.3s; font-weight: bold; }
+        .btn-v { background-color: #4CAF50; color: white; }
+        .btn-f { background-color: #f44336; color: white; }
+        
+        /* Estilo da Janela de Pontuação (Modal) */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 50px; border-radius: 20px; text-align: center; border: 5px solid #ff9800; }
+        .modal-content h2 { font-size: 45px; color: #ff9800; }
+        .btn-reiniciar { background: #2196F3; color: white; padding: 15px 30px; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="contador">Pergunta 1 de 10</div>
+    <div id="pergunta" class="pergunta">Carregando...</div>
+    <button class="btn-v" onclick="responder(true)">Verdadeiro</button>
+    <button class="btn-f" onclick="responder(false)">Falso</button>
+</div>
+
+<div id="modal">
+    <div class="modal-content">
+        <h2 id="resultado_texto"></h2>
+        <button class="btn-reiniciar" onclick="reiniciar()">JOGAR NOVAMENTE</button>
+    </div>
+</div>
+
+<script>
+    const perguntasOriginais = [
+        { q: "Não devemos comer perto do computador.", a: true },
+        { q: "O computador funciona sem energia elétrica.", a: false },
+        { q: "Nunca devemos compartilhar nossas senhas.", a: true },
+        { q: "Podemos puxar os fios do computador com força.", a: false },
+        { q: "Não é seguro clicar em qualquer link da internet.", a: true },
+        { q: "Ninguém deve gritar no laboratório de informática.", a: true },
+        { q: "Podemos desligar o computador direto na tomada.", a: false },
+        { q: "Devemos pedir ajuda ao professor se algo der errado.", a: true },
+        { q: "Nunca devemos usar o computador com as mãos sujas.", a: true },
+        { q: "O teclado serve para chutar e pular em cima.", a: false }
+    ];
+
+    let perguntas = [];
+    let indiceAtual = 0;
+    let pontos = 0;
+
+    function iniciarJogo() {
+        // Embaralha as perguntas
+        perguntas = [...perguntasOriginais].sort(() => Math.random() - 0.5);
+        indiceAtual = 0;
+        pontos = 0;
+        document.getElementById("modal").style.display = "none";
+        carregarPergunta();
+    }
+
+    function carregarPergunta() {
+        if (indiceAtual < 10) {
+            document.getElementById("contador").innerText = `Pergunta ${indiceAtual + 1} de 10`;
+            document.getElementById("pergunta").innerText = perguntas[indiceAtual].q;
+        } else {
+            document.getElementById("resultado_texto").innerText = `VOCÊ CONSEGUIU ${pontos} PONTOS!`;
+            document.getElementById("modal").style.display = "flex";
+        }
+    }
+
+    function responder(escolha) {
+        if (escolha === perguntas[indiceAtual].a) pontos++;
+        indiceAtual++;
+        carregarPergunta();
+    }
+
+    function reiniciar() { iniciarJogo(); }
+
+    iniciarJogo();
+</script>
+</body>
+</html>
